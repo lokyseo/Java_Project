@@ -22,7 +22,7 @@ public class CheckBox extends JFrame
 
     public CheckBox()
     {
-        setTitle("체크박스로 분류");
+        setTitle("오늘 점심 뭐 먹지");
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -36,8 +36,15 @@ public class CheckBox extends JFrame
 
         table = new JTable(tableModel);
 
-        filterCheckBox = new JCheckBox[1];
-        filterCheckBox[0] = new JCheckBox("라면");
+        filterCheckBox = new JCheckBox[7];
+        filterCheckBox[0] = new JCheckBox("면류");
+        filterCheckBox[1] = new JCheckBox("밥류");
+        filterCheckBox[2] = new JCheckBox("기타");
+        
+        filterCheckBox[3] = new JCheckBox("한식");
+        filterCheckBox[4] = new JCheckBox("일식");
+        filterCheckBox[5] = new JCheckBox("중식");
+        filterCheckBox[6] = new JCheckBox("양식");
         
         for(int i = 0; i < filterCheckBox.length; i++)
         {
@@ -64,14 +71,23 @@ public class CheckBox extends JFrame
             }
         });
 
-        JPanel panel = new JPanel();
-        for(int i = 0; i < filterCheckBox.length; i++)
-        {
-        	panel.add(filterCheckBox[i]);	
+        JPanel northPanel = new JPanel(new GridLayout(2, 1));
+        JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        for(int i = 0; i < 3; i++)
+        {  
+        	row1.add(filterCheckBox[i]);	
         }
+        JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        for(int i = 3; i < 6; i++)
+        {
+        	row2.add(filterCheckBox[i]);	
+        }
+        row1.add(loadButton);
+        northPanel.add(row1);
+        northPanel.add(row2);
+        loadData();
         
-        panel.add(loadButton);
-        add(panel, BorderLayout.NORTH);
+        add(northPanel, BorderLayout.NORTH);
     }
 
     private List<String[]> readCsvData(String filePath) 
@@ -100,25 +116,42 @@ public class CheckBox extends JFrame
         {
             tableModel.addRow(row);
         }
+        for(int i = 0; i < filterCheckBox.length; i++)
+        {
+        	filterCheckBox[i].setSelected(false);
+        }
+        
+       
     }
 
     private void applyFilter()
     {
-        tableModel.setRowCount(0); 
-        for (String[] row : csvData) 
+    	tableModel.setRowCount(0); 
+    	
+    	
+    	for (String[] row : csvData) 
         {
-        	for(int i = 0; i <filterCheckBox.length; i++)
-        	{
-        		if (filterCheckBox[i].isSelected()) 
-                {
-                    if (row.length >= 0 && filterCheckBox[i].getText().equals(row[0])) 
-                    {
-                        tableModel.addRow(row);
-                    }
-                }	
-        	}
-             
-           
+    		tableModel.addRow(row);
+            
+        }
+    	int rowCount = tableModel.getRowCount() - 1;
+    	
+    	for (String[] row : csvData) 
+        {  		
+    		for(int i = 0; i < filterCheckBox.length; i++)
+          	{
+        		 if (filterCheckBox[i].isSelected()) 
+                 {	    			
+        			 if (row.length >= 0 && !filterCheckBox[i].getText().equals(row[3]))
+     	             {
+     	            	tableModel.removeRow(rowCount);
+     	             }
+            
+                 }
+          	}
+            
+            
+            rowCount--;
         }
     }
 
