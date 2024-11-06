@@ -128,30 +128,26 @@ public class CheckBox extends JFrame
     {
     	tableModel.setRowCount(0); 
     	
-    	
     	for (String[] row : csvData) 
         {
     		tableModel.addRow(row);
-            
-        }
-    	int rowCount = tableModel.getRowCount() - 1;
-    	
-    	for (String[] row : csvData) 
-        {  		
+    		
     		for(int i = 0; i < filterCheckBox.length; i++)
           	{
         		 if (filterCheckBox[i].isSelected()) 
                  {	    			
-        			 if (row.length >= 0 && !filterCheckBox[i].getText().equals(row[3]))
+        			 if (row.length >= 0 && !filterCheckBox[i].getText().equals(row[3]) && i < 3)
      	             {
-     	            	tableModel.removeRow(rowCount);
+     	            	tableModel.removeRow(tableModel.getRowCount() - 1);
+     	            	break;
      	             }
-            
+        			 else if (row.length >= 0 && !filterCheckBox[i].getText().equals(row[4]) && i >= 3 && i < 6 )
+     	             {
+     	            	tableModel.removeRow(tableModel.getRowCount() - 1);
+     	            	break;
+     	             }
                  }
-          	}
-            
-            
-            rowCount--;
+          	}     
         }
     }
 
