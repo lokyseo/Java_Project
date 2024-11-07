@@ -24,7 +24,7 @@ public class CheckBox extends JFrame
     {
         setTitle("오늘 점심 뭐 먹지");
         setSize(600, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
         csvData = readCsvData("ExcelRead.csv");

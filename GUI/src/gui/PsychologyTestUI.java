@@ -24,7 +24,7 @@ public class PsychologyTestUI extends JFrame {
         answers = new int[service.getQuestionCount()]; // 질문 수만큼 배열 생성
 
         setTitle(service.getTestName() + " 검사"); // 윈도우 제목에 검사 이름 표시
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(400, 300);
         setLocationRelativeTo(null); // 중앙에 배치
 
