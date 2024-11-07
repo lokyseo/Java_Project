@@ -78,7 +78,7 @@ public class CheckBox extends JFrame
         	row1.add(filterCheckBox[i]);	
         }
         JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        for(int i = 3; i < 6; i++)
+        for(int i = 3; i < 7; i++)
         {
         	row2.add(filterCheckBox[i]);	
         }
@@ -127,30 +127,76 @@ public class CheckBox extends JFrame
     private void applyFilter()
     {
     	tableModel.setRowCount(0); 
+    	boolean row_Bool[] = new boolean[2];
+    	boolean row_BoolChecked[] = new boolean[2];
     	
     	for (String[] row : csvData) 
         {
     		tableModel.addRow(row);
-    		
+    		for(int i = 0; i < row_Bool.length; i++)
+        	{
+        		row_Bool[i] = false;
+        		row_BoolChecked[i] = false;
+        	}
+        	
     		for(int i = 0; i < filterCheckBox.length; i++)
           	{
-        		 if (filterCheckBox[i].isSelected()) 
-                 {	    			
-        			 if (row.length >= 0 && !filterCheckBox[i].getText().equals(row[3]) && i < 3)
-     	             {
-     	            	tableModel.removeRow(tableModel.getRowCount() - 1);
-     	            	break;
-     	             }
-        			 else if (row.length >= 0 && !filterCheckBox[i].getText().equals(row[4]) && i >= 3 && i < 6 )
-     	             {
-     	            	tableModel.removeRow(tableModel.getRowCount() - 1);
-     	            	break;
-     	             }
+        		 if (filterCheckBox[i].isSelected() && row.length >= 0) 
+                 {	    
+        			 if(i < 3)// 1번째 줄 체크박스
+        			 {
+        				 row_BoolChecked[0] = true;
+        				 if (filterCheckBox[i].getText().equals(row[3]))
+         	             {         	            	
+        					 row_Bool[0] = true;
+         	             }
+            	  				 
+        			 }
+        			 if(i >= 3 && i < 7 )// 2번째 줄 체크박스
+        			 {
+        				 row_BoolChecked[1] = true;
+        				 
+        				 if (filterCheckBox[i].getText().equals(row[4]))
+         	             {           	
+        					 row_Bool[1] = true;
+         	             }   		
+        			 }       			 
+        			
                  }
           	}     
+    		
+    		
+    		for(int i = 0; i < row_BoolChecked.length; i++)
+    		{
+    			if(row_BoolChecked[i] == false) //한개도 체크가 안되어 있을 때
+    			{
+    				row_Bool[i]= true;
+    			}
+    		}
+    		
+    		boolean allChecked_Bool = areAllTrue(row_Bool); //전부 트루인가
+    		
+    		if(allChecked_Bool == false)
+    		{
+    			tableModel.removeRow(tableModel.getRowCount() - 1);
+    		}
+    		
         }
     }
 
+    
+    public boolean areAllTrue(boolean[] arr)
+    {
+        for (boolean value : arr)
+        {
+            if (!value)
+            {
+                return false; 
+            }
+        }
+        return true; 
+    }
+    
     public static void main(String[] args)
     {
         SwingUtilities.invokeLater(new Runnable()
