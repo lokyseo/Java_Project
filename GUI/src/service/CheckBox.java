@@ -36,7 +36,7 @@ public class CheckBox extends JFrame
 
         table = new JTable(tableModel);
 
-        filterCheckBox = new JCheckBox[7];
+        filterCheckBox = new JCheckBox[9];
         filterCheckBox[0] = new JCheckBox("면류");
         filterCheckBox[1] = new JCheckBox("밥류");
         filterCheckBox[2] = new JCheckBox("기타");
@@ -45,6 +45,9 @@ public class CheckBox extends JFrame
         filterCheckBox[4] = new JCheckBox("일식");
         filterCheckBox[5] = new JCheckBox("중식");
         filterCheckBox[6] = new JCheckBox("양식");
+        
+        filterCheckBox[7] = new JCheckBox("교내");
+        filterCheckBox[8] = new JCheckBox("교외");
         
         for(int i = 0; i < filterCheckBox.length; i++)
         {
@@ -71,20 +74,30 @@ public class CheckBox extends JFrame
             }
         });
 
-        JPanel northPanel = new JPanel(new GridLayout(2, 1));
+        JPanel northPanel = new JPanel(new GridLayout(3, 1));
+        
         JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         for(int i = 0; i < 3; i++)
         {  
         	row1.add(filterCheckBox[i]);	
         }
+        
         JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         for(int i = 3; i < 7; i++)
         {
         	row2.add(filterCheckBox[i]);	
         }
+        
+        JPanel row3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        for(int i = 7; i < 9; i++)
+        {
+        	row3.add(filterCheckBox[i]);	
+        }
+        
         row1.add(loadButton);
         northPanel.add(row1);
         northPanel.add(row2);
+        northPanel.add(row3);
         loadData();
         
         add(northPanel, BorderLayout.NORTH);
@@ -127,8 +140,8 @@ public class CheckBox extends JFrame
     private void applyFilter()
     {
     	tableModel.setRowCount(0); 
-    	boolean row_Bool[] = new boolean[2];
-    	boolean row_BoolChecked[] = new boolean[2];
+    	boolean row_Bool[] = new boolean[3];
+    	boolean row_BoolChecked[] = new boolean[3];
     	
     	for (String[] row : csvData) 
         {
@@ -160,7 +173,16 @@ public class CheckBox extends JFrame
          	             {           	
         					 row_Bool[1] = true;
          	             }   		
-        			 }       			 
+        			 }     
+        			 if(i >= 7 && i < 9)
+        			 {
+        				 row_BoolChecked[2] = true;
+        				 
+        				 if (filterCheckBox[i].getText().equals(row[2]))
+         	             {           	
+        					 row_Bool[2] = true;
+         	             }   		
+        			 }
         			
                  }
           	}     
