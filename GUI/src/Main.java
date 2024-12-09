@@ -1,104 +1,101 @@
+import gui.IdealTypeSurveyUI;
 import gui.PsychologyTestUI;
 import service.EnneagramService;
 import service.MBTIService;
 import service.TestService;
 import service.CheckBox;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
-
-
-
 
 public class Main extends JFrame {
     public Main() {
         // 메인 프레임 설정
         setTitle("설문지 메인 페이지");
-        setSize(400, 200);
+        setSize(1000, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // 화면 중앙에 표시
+        setResizable(false); // 최대화 버튼 제거
 
         // 패널 설정
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 1, 10, 10)); // 3행 1열 그리드 레이아웃, 간격 10px
+        panel.setLayout(new GridLayout(2, 2)); // 3행 2열 그리드 레이아웃
 
-        // 심리검사 버튼
-        JButton btnPsychologySurvey = new JButton("MBTI 검사");
+        // MBTI 심리검사 버튼
+        JButton btnPsychologySurvey = createImageButton("img/mbti.png", "MBTI 검사", 500, 300);
         btnPsychologySurvey.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 심리검사 설문지 열기
-                JOptionPane.showMessageDialog(null, "MBTI 심리검사 설문지로 이동합니다.");
-                // 여기에 심리검사 설문지로 이동하는 코드를 추가하세요
-                // MBTI 테스트를 위한 서비스 객체 생성
                 TestService mbtiService = new MBTIService();
                 PsychologyTestUI mbtiTestUI = new PsychologyTestUI(mbtiService);
-                mbtiTestUI.setVisible(true); // MBTI 테스트 UI를 표시
+                mbtiTestUI.setVisible(true);
             }
         });
         panel.add(btnPsychologySurvey);
 
-        // 심리검사 버튼
-        JButton btnPsychologySurvey2 = new JButton("에니어그램 조사");
+        // 에니어그램 검사 버튼
+        JButton btnPsychologySurvey2 = createImageButton("img/ani.png", "에니어그램 검사", 500, 300);
         btnPsychologySurvey2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 심리검사 설문지 열기
-                JOptionPane.showMessageDialog(null, "에니어그램 심리검사 설문지로 이동합니다.");
-                // 여기에 심리검사 설문지로 이동하는 코드를 추가하세요
-                // 에니어그램 테스트를 위한 서비스 객체 생성
                 TestService enneagramService = new EnneagramService();
                 PsychologyTestUI enneagramTestUI = new PsychologyTestUI(enneagramService);
-                enneagramTestUI.setVisible(true); // 에니어그램 테스트 UI를 표시
+                enneagramTestUI.setVisible(true);
             }
         });
         panel.add(btnPsychologySurvey2);
 
-        // 음식 관련 설문 버튼
-        JButton btnFoodSurvey = new JButton("음식 관련 설문지");
+        // 음식 설문조사 버튼
+        JButton btnFoodSurvey = createImageButton("img/food.png", "음식 관련 설문지", 500, 300);
         btnFoodSurvey.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 음식 관련 설문지 열기
-                JOptionPane.showMessageDialog(null, "음식 관련 설문지로 이동합니다.");
-                // 여기에 음식 관련 설문지로 이동하는 코드를 추가하세요
-                SwingUtilities.invokeLater(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        new CheckBox().setVisible(true);
-                    }
-                });
-
+                SwingUtilities.invokeLater(() -> new CheckBox().setVisible(true));
             }
         });
         panel.add(btnFoodSurvey);
 
-        // 종료 버튼
-        JButton btnExit = new JButton("종료");
-        btnExit.addActionListener(new ActionListener() {
+        // 이상형 설문지 버튼
+        JButton btnIdealSurvey = createImageButton("img/heart.png", "이상형 성격 검사", 500, 300); // 이미지 변경 가능
+        btnIdealSurvey.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0); // 프로그램 종료
+                SwingUtilities.invokeLater(() -> new IdealTypeSurveyUI().setVisible(true)); // 이상형 설문지 UI 호출
             }
         });
-        panel.add(btnExit);
+        panel.add(btnIdealSurvey);
 
         // 패널을 프레임에 추가
         add(panel);
     }
 
-    public static void main(String[] args) {
+    // 이미지 버튼 생성 함수
+    private JButton createImageButton(String imagePath, String tooltip, int buttonWidth, int buttonHeight) {
+        try {
+            // 이미지 로드
+            ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(imagePath));
 
-        //메인패이지 실행
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Main().setVisible(true);
-            }
-        });
+            // 버튼 크기에 맞게 이미지 크기 조정
+            Image scaledImage = icon.getImage().getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
+
+            // 버튼 생성
+            JButton button = new JButton(new ImageIcon(scaledImage));
+            button.setToolTipText(tooltip); // 툴팁 추가
+            button.setFocusPainted(false); // 포커스 테두리 제거
+            button.setContentAreaFilled(false); // 버튼 배경 제거
+            button.setBorderPainted(false); // 버튼 테두리 제거
+            button.setPreferredSize(new Dimension(buttonWidth, buttonHeight)); // 버튼 크기 설정
+
+            return button;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new JButton("이미지 로드 실패"); // 이미지 로드 실패 시 기본 버튼 반환
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new Main().setVisible(true));
     }
 }
