@@ -1,5 +1,6 @@
 package service;
 
+
 public class MBTIService implements TestService {
 
     private final String[] questions = {
@@ -39,16 +40,29 @@ public class MBTIService implements TestService {
         int judging = 0;      // 판단 점수
         int perceiving = 0;   // 인식 점수
 
-        for (int answer : answers) {
+        for (int i = 0; i < answers.length; i++) {
             // 각 질문에 대한 답변에 따라 점수 계산
-            if (answer == 1) {
-                extroversion++;
-            } else if (answer == 2) {
-                introversion++;
-            } else if (answer == 3) {
-                sensing++;
-            } else if (answer == 4) {
-                intuition++;
+            switch (i) {
+                case 0: // 외향성/내향성
+                case 1:
+                    if (answers[i] == 1) extroversion++; // 외향성
+                    else if (answers[i] == 2) introversion++; // 내향성
+                    break;
+                case 2: // 감각/직관
+                case 3:
+                    if (answers[i] == 1) sensing++; // 감각
+                    else if (answers[i] == 2) intuition++; // 직관
+                    break;
+                case 4: // 사고/감정
+                case 5:
+                    if (answers[i] == 1) thinking++; // 사고
+                    else if (answers[i] == 2) feeling++; // 감정
+                    break;
+                case 6: // 판단/인식
+                case 7:
+                    if (answers[i] == 1) judging++; // 판단
+                    else if (answers[i] == 2) perceiving++; // 인식
+                    break;
             }
         }
 
@@ -58,7 +72,7 @@ public class MBTIService implements TestService {
                 (thinking > feeling ? "T" : "F") +
                 (judging > perceiving ? "J" : "P");
 
-        // personality를 int로 변환하기 위해 switch 문 사용
+
         return personalityToIndex(personality); // MBTI 유형을 인덱스로 반환
     }
 
@@ -108,4 +122,5 @@ public class MBTIService implements TestService {
             default -> "알 수 없는 유형"; // 알 수 없는 유형 처리
         };
     }
+
 }

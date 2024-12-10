@@ -1,4 +1,4 @@
-package gui;
+package service;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,6 +53,13 @@ public class IdealTypeSurveyUI extends JFrame {
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+        // 아이콘 경로 확인 후 설정
+        try {
+            ImageIcon img = new ImageIcon(getClass().getResource("/resources/icon.png")); // 경로 확인
+            setIconImage(img.getImage());
+        } catch (Exception e) {
+            System.out.println("아이콘 로드 실패: " + e.getMessage());
+        }
 
         // GUI 설정
         questionArea = new JTextArea(5, 20);
@@ -134,26 +141,48 @@ public class IdealTypeSurveyUI extends JFrame {
         return true;
     }
 
-    // 결과 표시
-    private void showResult() {
+    // 결과값 계산
+    private int calculateTotalScore() {
         int totalScore = 0;
-        for (int i = 0; i < answers.length; i++) {
-            totalScore += answers[i];
+        for (int answer : answers) {
+            totalScore += answer;
         }
+        return totalScore;
+    }
 
-        String resultMessage = "";
-        if (totalScore <= 20) {
-            resultMessage = "당신의 이상형은 내성적이고 차분한 성격의 사람입니다.";
-        } else if (totalScore <= 30) {
-            resultMessage = "당신의 이상형은 신중하고 지적인 성격의 사람입니다.";
-        } else if (totalScore <= 40) {
-            resultMessage = "당신의 이상형은 활발하고 사교적인 성격의 사람입니다.";
-        } else {
-            resultMessage = "당신의 이상형은 모험적이고 개방적인 성격의 사람입니다.";
-        }
 
-        JOptionPane.showMessageDialog(this, resultMessage); // 결과 보여주기
+    // 결과 메시지
+    private void showResult() {
+        int totalScore = calculateTotalScore();
+
+        String resultMessage = getResultMessage(totalScore);
+        JOptionPane.showMessageDialog(this, resultMessage); // 결과 메시지 보여주기
         dispose(); // 창 닫기
+    }
+
+    // 결과 메시지 텍스트 반환
+    private String getResultMessage(int totalScore) {
+        if (totalScore <= 20) {
+            return "당신의 이상형은 내성적이고 차분한 성격의 사람입니다.\n"
+                    + "이상형은 사람들과 큰 대화보다 혼자만의 시간을 소중히 여깁니다.\n"
+                    + "자신의 감정을 잘 표현하지 않으며, 차분하고 안정적인 환경을 좋아합니다.\n"
+                    + "두 사람만의 조용한 시간을 보내며, 깊은 대화를 나누는 것을 선호합니다.";
+        } else if (totalScore <= 30) {
+            return "당신의 이상형은 신중하고 지적인 성격의 사람입니다.\n"
+                    + "이상형은 사고가 깊고, 자신의 의견을 잘 표현합니다.\n"
+                    + "계획적이고 신중하게 행동하며, 어떤 일을 결정할 때 신중하게 시간을 투자합니다.\n"
+                    + "조용한 환경에서 두 사람이 함께 시간을 보내며 서로의 의견을 나누는 것을 좋아합니다.";
+        } else if (totalScore <= 40) {
+            return "당신의 이상형은 활발하고 사교적인 성격의 사람입니다.\n"
+                    + "이상형은 사람들과의 소셜 활동을 즐기며, 새로운 사람들과 쉽게 친해집니다.\n"
+                    + "자신의 감정을 솔직하게 표현하며, 외향적이고 적극적인 성격입니다.\n"
+                    + "활동적인 데이트나 모임에서 시간을 보내는 것을 좋아합니다.";
+        } else {
+            return "당신의 이상형은 모험적이고 개방적인 성격의 사람입니다.\n"
+                    + "이상형은 새로운 경험과 모험을 좋아하며, 자유롭고 개방적인 성격입니다.\n"
+                    + "자신의 감정을 잘 표현하고, 다양한 경험을 함께 할 사람을 원합니다.\n"
+                    + "여행이나 모험적인 활동을 함께 즐기는 데이트를 선호합니다.";
+        }
     }
 
     public static void main(String[] args) {
