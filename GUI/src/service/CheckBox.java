@@ -26,6 +26,13 @@ public class CheckBox extends JFrame
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+        // 아이콘 경로 확인 후 설정
+        try {
+            ImageIcon img = new ImageIcon(getClass().getResource("/resources/icon.png")); // 경로 확인
+            setIconImage(img.getImage());
+        } catch (Exception e) {
+            System.out.println("아이콘 로드 실패: " + e.getMessage());
+        }
 
         csvData = readCsvData("ExcelRead.csv");
 

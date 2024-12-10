@@ -1,6 +1,7 @@
 package gui;
 import service.TestService;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -27,6 +28,13 @@ public class PsychologyTestUI extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(400, 300);
         setLocationRelativeTo(null); // 중앙에 배치
+        // 아이콘 경로 확인 후 설정
+        try {
+            ImageIcon img = new ImageIcon(getClass().getResource("/resources/icon.png")); // 경로 확인
+            setIconImage(img.getImage());
+        } catch (Exception e) {
+            System.out.println("아이콘 로드 실패: " + e.getMessage());
+        }
 
         // GUI 컴포넌트 설정
         questionArea = new JTextArea(5, 20);

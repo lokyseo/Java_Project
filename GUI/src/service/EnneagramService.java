@@ -1,8 +1,9 @@
 package service;
 
+
 public class EnneagramService implements TestService {
 
-    private String[] questions = {
+    private final String[] questions = {
             "나는 자주 생각에 빠져 있다.",
             "나는 사회적 모임을 즐긴다.",
             "나는 이론보다는 실용성을 더 중요하게 여긴다.",
